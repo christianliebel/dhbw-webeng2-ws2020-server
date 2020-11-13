@@ -1,9 +1,8 @@
-import { Todo } from './../todo';
+import { Todo } from '../todo';
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from '@nestjs/common';
 
-// This should be "todos", not "todo"
 @Controller('todos')
-export class TodoController {
+export class TodosController {
 
     // GET /todos
     @Get()
