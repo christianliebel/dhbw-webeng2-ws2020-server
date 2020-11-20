@@ -1,6 +1,6 @@
 import { TodosService } from './todos.service';
 import { Todo } from '../todo';
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put, Req } from '@nestjs/common';
 
 @Controller('todos')
 export class TodosController {
@@ -9,14 +9,14 @@ export class TodosController {
 
     // GET /todos
     @Get()
-    getAll(): Todo[] {
-        return this.todosService.getAll('user');
+    getAll(@Req() req): Todo[] {
+        return this.todosService.getAll(req.user.sub);
     }
 
     // GET /todos/:id
     @Get(':id')
-    get(@Param('id') id: string): Todo {
-        const todo = this.todosService.get(+id, 'user');
+    get(@Param('id') id: string, @Req() req): Todo {
+        const todo = this.todosService.get(+id, req.user.sub);
         if (!todo) {
             throw new NotFoundException();
         }
@@ -26,23 +26,23 @@ export class TodosController {
     // POST /todos
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    add(@Body() todo: Todo): Todo {
-        this.todosService.add(todo, 'user');
+    add(@Body() todo: Todo, @Req() req): Todo {
+        this.todosService.add(todo, req.user.sub);
         return todo;
     }
 
     // PUT /todos/:id
     @Put(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    update(@Param('id') id: string, @Body() todo: Todo): void {
+    update(@Param('id') id: string, @Body() todo: Todo, @Req() req): void {
         todo.id = +id;
-        this.todosService.update(todo, 'user');
+        this.todosService.update(todo, req.user.sub);
     }
 
     // DELETE /todos/:id
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    delete(@Param('id') id: string): void {
-        this.todosService.delete(+id, 'user');
+    delete(@Param('id') id: string, @Req() req): void {
+        this.todosService.delete(+id, req.user.sub);
     }
 }
