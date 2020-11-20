@@ -12,7 +12,7 @@ export class AuthenticationMiddleware implements NestMiddleware {
         jwksUri: 'https://christianliebel.eu.auth0.com/.well-known/jwks.json',
       }),
 
-      audience: 'http://localhost:3000',
+      audience: 'https://christianliebel.com/dhbw/2020/ws/todo',
       issuer: 'https://christianliebel.eu.auth0.com/',
       algorithms: ['RS256'],
     })(req, res, err => {
